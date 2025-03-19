@@ -1,0 +1,31 @@
+apiVersion: k3d.io/v1alpha4
+kind: Simple
+metadata:
+  name: minio
+servers: 3
+agents: 4
+volumes:
+  - volume: /mnt/minio-pv:/mnt/minio-pv
+    nodeFilters:
+      - all
+ports:
+  - port: 30000-30050:30000-30050
+    nodeFilters:
+      - server:0
+  - port: 9000:9000
+    nodeFilters:
+      - server:0
+  - port: 9090:9090
+    nodeFilters:
+      - server:0
+  - port: 80:80
+    nodeFilters:
+      - loadbalancer:*
+  - port: 443:443
+    nodeFilters:
+      - loadbalancer:*
+# options:
+#   k3d:
+#     wait: true  # Ensures cluster is fully ready before proceeding
+#   kubeconfig:
+#     updateDefaultKubeconfig: true  # Ensures easy access to cluster
